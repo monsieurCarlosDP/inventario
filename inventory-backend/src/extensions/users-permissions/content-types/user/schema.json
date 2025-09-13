@@ -71,6 +71,9 @@
       "relation": "oneToOne",
       "target": "api::item.item",
       "mappedBy": "users_permissions_user"
+    },
+    "Avatar": {
+      "type": "string"
     }
   }
 }
