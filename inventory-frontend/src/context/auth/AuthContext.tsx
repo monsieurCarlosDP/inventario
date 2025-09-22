@@ -19,13 +19,43 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   useLayoutEffect(() => {
     (async () => {
-      const authToken = localStorage.getItem("authToken");
-      const user = JSON.parse(localStorage.getItem("user") ?? "");
-      console.log(user);
-      if (user !== "") setUser(user);
+      try {
+        const authToken = localStorage.getItem("authToken");
+        const userString = localStorage.getItem("user");
 
-      if (authToken) api.setAuthToken(authToken);
-      setIsLogging(false);
+        // Validar que existe y no está vacío
+        if (
+          authToken &&
+          userString &&
+          userString !== "null" &&
+          userString !== "undefined"
+        ) {
+          try {
+            const userData = JSON.parse(userString);
+
+            // Validar que el objeto tiene las propiedades esperadas
+            if (userData && typeof userData === "object" && userData.id) {
+              api.setAuthToken(authToken);
+              setUser(userData);
+              console.log("Usuario restaurado:", userData);
+            } else {
+              console.warn("Datos de usuario inválidos:", userData);
+              // Limpiar datos corruptos
+              localStorage.removeItem("user");
+              localStorage.removeItem("authToken");
+            }
+          } catch (parseError) {
+            console.error("Error al parsear usuario:", parseError);
+            // Limpiar datos corruptos
+            localStorage.removeItem("user");
+            localStorage.removeItem("authToken");
+          }
+        }
+      } catch (error) {
+        console.error("Error al inicializar auth:", error);
+      } finally {
+        setIsLogging(false);
+      }
     })();
   }, [api]);
 

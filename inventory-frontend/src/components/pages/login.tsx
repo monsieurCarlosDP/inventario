@@ -3,7 +3,7 @@ import { useReducer } from "react";
 import { Navigate } from "react-router";
 import { useAuth } from "../../context/auth/useAuth";
 import Button from "../atoms/Button/Button";
-import TextField from "../atoms/Input/TextInput";
+import TextField from "../atoms/Input/TextField";
 import type { ILoginData, LoginAction } from "./TLogin";
 
 const loginReducer = (state: ILoginData, action: LoginAction): ILoginData => {

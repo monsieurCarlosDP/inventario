@@ -36,7 +36,7 @@
       "relation": "oneToMany",
       "target": "plugin::users-permissions.user"
     },
-    "users_permissions_user": {
+    "UserAddedBy": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user",

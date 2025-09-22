@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
+import AddItem from "./components/pages/AddItem";
 import Login from "./components/pages/Login";
 import ProtectedLayout from "./components/templates/ProtectedLayout";
 
@@ -22,10 +23,10 @@ const AppRoutes = ({ children }: IAppRouteProps) => {
             }
           />
           <Route
-            path="la"
+            path="addItem"
             element={
               <ProtectedLayout>
-                <h1>Hola</h1>
+                <AddItem />
               </ProtectedLayout>
             }
           />

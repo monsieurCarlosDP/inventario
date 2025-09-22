@@ -1,14 +1,13 @@
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
-import { IconButton } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import { useAuth } from "../../context/auth/useAuth";
-type Props = {};
 
-const Header = (props: Props) => {
+const Header = () => {
   const { user, logout } = useAuth();
   const avatarImage = user?.Avatar;
-  console.log(avatarImage);
+
   return (
     <Stack
       component={"header"}
@@ -22,7 +21,21 @@ const Header = (props: Props) => {
         alignItems: "center",
       }}
     >
-      {avatarImage && <Avatar src={avatarImage} />}
+      <Stack
+        flexDirection="row"
+        justifyContent="center"
+        alignItems="center"
+        gap={1}
+      >
+        <>
+          {avatarImage ? (
+            <Avatar src={avatarImage} />
+          ) : (
+            <Avatar src={undefined} />
+          )}
+          <Typography variant="body1">{user?.username}</Typography>
+        </>
+      </Stack>
       <IconButton onClick={logout}>
         <PowerSettingsNewIcon />
       </IconButton>

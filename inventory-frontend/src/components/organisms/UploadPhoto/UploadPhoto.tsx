@@ -1,17 +1,22 @@
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import { useRef, useState } from "react";
+import { Avatar, Stack } from "@mui/material";
+import { useRef } from "react";
 import Button from "../../atoms/Button/Button";
 
-const UploadPhoto = () => {
+interface IUploadPhotoProps {
+  onPhotoChange?: (photo: File | null) => void;
+  photo?: File | null;
+}
+
+const UploadPhoto = ({ onPhotoChange, photo }: IUploadPhotoProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<File>();
 
   const handleClickOpenCamera = () => {
     fileInputRef.current?.click();
   };
 
   const onFileSelect = (file: File) => {
-    setFile(file);
+    onPhotoChange?.(file);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,18 +26,7 @@ const UploadPhoto = () => {
     }
   };
   return (
-    <div>
-      {file && (
-        <img
-          style={{
-            width: "256px",
-            height: "256px",
-            objectFit: "cover",
-            objectPosition: "center",
-          }}
-          src={URL.createObjectURL(file)}
-        />
-      )}
+    <Stack>
       <input
         ref={fileInputRef}
         type="file"
@@ -41,11 +35,18 @@ const UploadPhoto = () => {
         style={{ display: "none" }}
         onChange={handleFileChange}
       />
-
-      <Button onClick={handleClickOpenCamera}>
-        <CameraAltIcon />
-      </Button>
-    </div>
+      {photo ? (
+        <Avatar
+          src={URL.createObjectURL(photo)}
+          sizes=""
+          onClick={handleClickOpenCamera}
+        />
+      ) : (
+        <Button onClick={handleClickOpenCamera}>
+          <CameraAltIcon />
+        </Button>
+      )}
+    </Stack>
   );
 };
 
