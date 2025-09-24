@@ -5,17 +5,23 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { Api } from "../../data/Api";
+import type { Api } from "../../data/Api";
 import AuthService from "../../services/auth-service/AuthService";
 import type { AuthResponse } from "../../services/auth-service/IAuthService";
 import type { IAuthContext } from "./IAuthContext";
 import { AuthContext } from "./useAuth";
 
-export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
+interface AuthContextProviderProps {
+  children: ReactNode;
+  api: Api;
+}
+
+export const AuthContextProvider = ({
+  children,
+  api,
+}: AuthContextProviderProps) => {
   const [user, setUser] = useState<AuthResponse["user"]>();
   const [isLogging, setIsLogging] = useState<boolean>(true);
-
-  const api = useMemo(() => new Api(), []);
 
   useLayoutEffect(() => {
     (async () => {
