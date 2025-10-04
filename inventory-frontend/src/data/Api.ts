@@ -20,13 +20,19 @@ export class Api {
 
       // Handle FormData - don't set Content-Type header for FormData
       const isFormData = config.body instanceof FormData;
-      const headers = isFormData
-        ? { ...this.defaultHeaders, ...config.headers }
-        : { ...this.defaultHeaders, ...config.headers };
+      let headers = { ...this.defaultHeaders };
+
+      // Merge additional headers
+      if (config.headers) {
+        headers = { ...headers, ...config.headers };
+      }
 
       // Remove Content-Type for FormData to let browser set it with boundary
-      if (isFormData && headers["Content-Type"]) {
+      if (isFormData) {
         delete headers["Content-Type"];
+      } else if (!isFormData && config.body !== undefined) {
+        // Ensure Content-Type is set for JSON
+        headers["Content-Type"] = "application/json";
       }
 
       const requestConfig: RequestInit = {
@@ -59,7 +65,7 @@ export class Api {
 
     return this.http(path, {
       method: "POST",
-      headers: isFormData ? headers : headers,
+      headers: headers || {},
       body: isFormData
         ? body
         : body !== undefined
@@ -84,6 +90,6 @@ export class Api {
   }
 
   async getItemList<T = IItemList>(): Promise<Paginated<T>> {
-    return this.get<Paginated<T>>("api/items");
+    return this.get<Paginated<T>>("api/items?populate=*");
   }
 }

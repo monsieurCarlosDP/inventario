@@ -1,6 +1,7 @@
-import { Delete, Edit, Favorite, FavoriteBorder } from "@mui/icons-material";
-import { Chip, IconButton } from "@mui/material";
+import { Delete } from "@mui/icons-material";
+import { Avatar, AvatarGroup, IconButton } from "@mui/material";
 import type { IItem } from "../../../data/Models";
+import { getFirstImageUrl } from "../../../utils/image/imageUtils";
 import TableCell from "../../atoms/Table/TableCell";
 import TableRow from "../../atoms/Table/TableRow";
 
@@ -41,28 +42,30 @@ const ItemRow = ({
 
   return (
     <TableRow>
+      <TableCell align="center">
+        <Avatar
+          src={getFirstImageUrl(item.Photos, "thumbnail")}
+          alt={item.Photos?.[0]?.name || "Item photo"}
+          sx={{ width: 40, height: 40 }}
+        />
+      </TableCell>
       <TableCell>{item.Name || "No name"}</TableCell>
       <TableCell>{item.Description || "No description"}</TableCell>
       <TableCell align="center">
-        {item.isFavorite ? (
-          <Chip
-            icon={<Favorite />}
-            label="Favorite"
-            color="primary"
-            size="small"
-          />
-        ) : (
-          <Chip
-            icon={<FavoriteBorder />}
-            label="Regular"
-            variant="outlined"
-            size="small"
-          />
-        )}
+        <AvatarGroup max={3}>
+          {item.Favorited?.map((user) => (
+            <Avatar
+              key={user.id}
+              src={user.Avatar}
+              alt={user.username}
+              sx={{ width: 40, height: 40 }}
+            />
+          ))}
+        </AvatarGroup>
       </TableCell>
       <TableCell>{formatDate(item.createdAt)}</TableCell>
       <TableCell align="center">
-        {onToggleFavorite && (
+        {/* {onToggleFavorite && (
           <IconButton
             onClick={handleToggleFavorite}
             color={item.isFavorite ? "primary" : "default"}
@@ -75,7 +78,7 @@ const ItemRow = ({
           <IconButton onClick={handleEdit} color="primary" size="small">
             <Edit />
           </IconButton>
-        )}
+        )} */}
         {onDelete && (
           <IconButton onClick={handleDelete} color="error" size="small">
             <Delete />

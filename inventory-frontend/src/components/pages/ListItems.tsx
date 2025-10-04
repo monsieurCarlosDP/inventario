@@ -13,6 +13,13 @@ const ListItems = () => {
 
   const columns: IColumn[] = [
     {
+      id: "photo",
+      label: "Photo",
+      align: "center",
+      width: "10%",
+      minWidth: 80,
+    },
+    {
       id: "name",
       label: "Name",
       align: "left",
@@ -23,12 +30,12 @@ const ListItems = () => {
       id: "description",
       label: "Description",
       align: "left",
-      width: "35%",
+      width: "30%",
       minWidth: 200,
     },
     {
       id: "favorite",
-      label: "Favorite",
+      label: "Favorited By",
       align: "center",
       width: "15%",
       minWidth: 120,
@@ -37,7 +44,7 @@ const ListItems = () => {
       id: "dateAdded",
       label: "Date Added",
       align: "left",
-      width: "15%",
+      width: "10%",
       minWidth: 120,
     },
     {

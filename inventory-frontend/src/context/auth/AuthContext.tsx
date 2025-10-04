@@ -38,7 +38,7 @@ export const AuthContextProvider = ({
         ) {
           try {
             const userData = JSON.parse(userString);
-
+            delete userData.documentId;
             // Validar que el objeto tiene las propiedades esperadas
             if (userData && typeof userData === "object" && userData.id) {
               api.setAuthToken(authToken);

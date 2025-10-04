@@ -36,10 +36,31 @@ export class ItemService implements IItemService {
 
   async createItem(itemData: ICreateItemRequest): Promise<IItemDTO> {
     try {
-      const formData = await this.prepareFormData(itemData);
-      const response = await this.api.post("api/items", formData);
+      // Construir data object de forma condicional
+      const dataObject: Record<string, unknown> = {
+        Name: itemData.Name,
+        Description: itemData.Description,
+      };
+
+      // Solo agregar Favorited si existe en itemData
+      if (itemData.Favorited !== undefined) {
+        dataObject.Favorited = [itemData.Favorited];
+      }
+      if (itemData.Photos !== undefined) {
+        dataObject.Photos = itemData.Photos;
+      }
+
+      const jsonData = {
+        data: dataObject,
+      };
+
+      console.log("📤 Sending JSON data:", jsonData);
+
+      const response = await this.api.post("api/items", jsonData);
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error("❌ Response error:", errorText);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
@@ -55,8 +76,30 @@ export class ItemService implements IItemService {
     itemData: IUpdateItemRequest
   ): Promise<IItemDTO> {
     try {
-      const formData = await this.prepareFormData(itemData);
-      const response = await this.api.post(`api/items/${id}`, formData);
+      // Construir data object de forma condicional
+      const dataObject: Record<string, unknown> = {};
+
+      // Solo agregar campos que están definidos
+      if (itemData.Name !== undefined) {
+        dataObject.Name = itemData.Name;
+      }
+      if (itemData.Description !== undefined) {
+        dataObject.Description = itemData.Description;
+      }
+      if (itemData.Favorited !== undefined) {
+        dataObject.Favorited = itemData.Favorited;
+      }
+      if (itemData.Photos !== undefined) {
+        dataObject.Photos = itemData.Photos;
+      }
+
+      const jsonData = {
+        data: dataObject,
+      };
+
+      console.log("📤 Updating with JSON data:", jsonData);
+
+      const response = await this.api.post(`api/items/${id}`, jsonData);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -84,29 +127,33 @@ export class ItemService implements IItemService {
     }
   }
 
-  private async prepareFormData(
-    itemData: Partial<ICreateItemRequest>
-  ): Promise<FormData> {
-    const formData = new FormData();
+  async uploadPhoto(photo: File): Promise<{ id: number; url: string }> {
+    try {
+      const formData = new FormData();
+      formData.append("files", photo);
 
-    // Add basic fields using the correct field names from Models
-    if (itemData.Name !== undefined) {
-      formData.append(
-        "data",
-        JSON.stringify({
-          Name: itemData.Name,
-          Description: itemData.Description || "",
-          isFavorite: itemData.isFavorite || false,
-        })
-      );
+      const response = await this.api.post("api/upload", formData);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const uploadResult = await response.json();
+
+      // Strapi devuelve un array de archivos subidos
+      if (Array.isArray(uploadResult) && uploadResult.length > 0) {
+        const uploadedFile = uploadResult[0];
+        return {
+          id: uploadedFile.id,
+          url: uploadedFile.url,
+        };
+      }
+
+      throw new Error("No file was uploaded");
+    } catch (error) {
+      console.error("Error uploading photo:", error);
+      throw this.createItemError("Failed to upload photo", error);
     }
-
-    // Add photo if present
-    if (itemData.photo instanceof File) {
-      formData.append("files.photo", itemData.photo);
-    }
-
-    return formData;
   }
 
   private createItemError(message: string, originalError: unknown): Error {
