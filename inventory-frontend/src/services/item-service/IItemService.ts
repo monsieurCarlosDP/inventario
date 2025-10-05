@@ -14,10 +14,10 @@ export interface ICreateItemRequest {
 export type IUpdateItemRequest = Partial<ICreateItemRequest>;
 
 export interface IItemService {
-  getItems(): Promise<Paginated<IItemDTO>>;
+  getItems(page?: number, pageSize?: number): Promise<Paginated<IItemDTO>>;
   getItemById(id: number): Promise<IItemDTO>;
   createItem(itemData: ICreateItemRequest): Promise<IItemDTO>;
   updateItem(id: number, itemData: IUpdateItemRequest): Promise<IItemDTO>;
-  deleteItem(id: number): Promise<void>;
+  deleteItem(documentId: string): Promise<void>;
   uploadPhoto(photo: File): Promise<{ id: number; url: string }>;
 }

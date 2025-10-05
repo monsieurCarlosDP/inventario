@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 import AddItem from "./components/pages/AddItem";
+import FavItems from "./components/pages/FavItems";
 import ListItems from "./components/pages/ListItems";
 import Login from "./components/pages/Login";
 import ProtectedLayout from "./components/templates/ProtectedLayout";
@@ -43,7 +44,7 @@ const AppRoutes = ({ children }: IAppRouteProps) => {
             path="*"
             element={
               <ProtectedLayout>
-                <h1>Dos</h1>
+                <FavItems />
               </ProtectedLayout>
             }
           />

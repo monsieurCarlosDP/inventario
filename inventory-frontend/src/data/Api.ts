@@ -82,6 +82,16 @@ export class Api {
     return response.json();
   }
 
+  async delete(
+    path: string,
+    headers?: Record<string, string>
+  ): Promise<Response> {
+    return this.http(path, {
+      method: "DELETE",
+      headers: headers || {},
+    });
+  }
+
   async authLoginLocal(
     identifier: string,
     password: string
@@ -89,7 +99,26 @@ export class Api {
     return this.post("api/auth/local", { identifier, password });
   }
 
-  async getItemList<T = IItemList>(): Promise<Paginated<T>> {
-    return this.get<Paginated<T>>("api/items?populate=*");
+  async getItemList<T = IItemList>(
+    page: number = 1,
+    pageSize: number = 25
+  ): Promise<Paginated<T>> {
+    return this.get<Paginated<T>>(
+      `api/items?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}`
+    );
+  }
+
+  async deleteItemById(id: string): Promise<Response> {
+    return this.delete(`api/items/${id}`);
+  }
+
+  async getUserFavItemsById<T = IItemList>(
+    id: string,
+    page: number = 1,
+    pageSize: number = 25
+  ): Promise<Paginated<T>> {
+    return this.get<Paginated<T>>(
+      `api/items?populate=*&filters[Favorited][id][$eq]=${id}&pagination[page]=${page}&pagination[pageSize]=${pageSize}`
+    );
   }
 }

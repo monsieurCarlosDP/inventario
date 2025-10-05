@@ -3,6 +3,7 @@ import TableBody from "../../atoms/Table/TableBody";
 import TableHead from "../../atoms/Table/TableHead";
 import TableRow from "../../atoms/Table/TableRow";
 import TableHeaderCell from "../../molecules/TableHeaderCell/TableHeaderCell";
+import TablePagination from "../../molecules/TablePagination/TablePagination";
 
 export interface IColumn {
   id: string;
@@ -17,12 +18,21 @@ interface ITableProps extends Omit<TableProps, "children"> {
   columns: IColumn[];
   children: React.ReactNode;
   stickyHeader?: boolean;
+  // Pagination props (optional)
+  pagination?: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+    onPageChange: (page: number) => void;
+  };
 }
 
 const Table = ({
   columns,
   children,
   stickyHeader = false,
+  pagination,
   ...props
 }: ITableProps) => {
   return (
@@ -84,6 +94,16 @@ const Table = ({
         </TableHead>
         <TableBody>{children}</TableBody>
       </MUITable>
+
+      {pagination && (
+        <TablePagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          totalItems={pagination.totalItems}
+          itemsPerPage={pagination.itemsPerPage}
+          onPageChange={pagination.onPageChange}
+        />
+      )}
     </Paper>
   );
 };

@@ -100,7 +100,7 @@ const AddItem = () => {
         console.error("Error uploading photo:", error);
         dispatch({
           type: "SET_SUBMIT_ERROR",
-          payload: "Failed to upload photo",
+          payload: "Error al subir la foto",
         });
       } finally {
         dispatch({ type: "SET_UPLOADING_PHOTO", payload: false });
@@ -119,7 +119,7 @@ const AddItem = () => {
       if (!formState.name.trim()) {
         dispatch({
           type: "SET_SUBMIT_ERROR",
-          payload: "Item name is required",
+          payload: "El nombre del artículo es requerido",
         });
         dispatch({ type: "SUBMIT_COMPLETED" });
         return;
@@ -133,7 +133,7 @@ const AddItem = () => {
       ) {
         dispatch({
           type: "SET_SUBMIT_ERROR",
-          payload: "Please wait for the photo to finish uploading",
+          payload: "Por favor espera a que termine de subir la foto",
         });
         dispatch({ type: "SUBMIT_COMPLETED" });
         return;
@@ -167,7 +167,7 @@ const AddItem = () => {
         }
       } catch (error) {
         const errorMessage =
-          error instanceof Error ? error.message : "Failed to create item";
+          error instanceof Error ? error.message : "Error al crear artículo";
         dispatch({ type: "SET_SUBMIT_ERROR", payload: errorMessage });
         console.error("Error creating item:", error);
       } finally {
@@ -234,7 +234,8 @@ const AddItem = () => {
       {/* Success Alert */}
       {formState.submitSuccess && (
         <Alert severity="success">
-          Item created successfully! The form will reset automatically.
+          ¡Artículo creado exitosamente! El formulario se reiniciará
+          automáticamente.
         </Alert>
       )}
 
@@ -247,7 +248,7 @@ const AddItem = () => {
           <Stack flexDirection="row" alignItems="center" gap={1}>
             <CircularProgress size={16} />
             <Typography variant="body2" color="text.secondary">
-              Uploading photo...
+              Subiendo foto...
             </Typography>
           </Stack>
         )}

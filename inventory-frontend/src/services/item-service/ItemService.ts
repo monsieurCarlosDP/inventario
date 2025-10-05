@@ -14,9 +14,12 @@ export class ItemService implements IItemService {
     this.api = api;
   }
 
-  async getItems(): Promise<Paginated<IItemDTO>> {
+  async getItems(
+    page?: number,
+    pageSize?: number
+  ): Promise<Paginated<IItemDTO>> {
     try {
-      const response = await this.api.getItemList<IItemDTO>();
+      const response = await this.api.getItemList<IItemDTO>(page, pageSize);
       return response;
     } catch (error) {
       console.error("Error fetching items:", error);
@@ -31,6 +34,27 @@ export class ItemService implements IItemService {
     } catch (error) {
       console.error(`Error fetching item ${id}:`, error);
       throw this.createItemError(`Failed to fetch item ${id}`, error);
+    }
+  }
+
+  async getFavItemsByUserId(
+    userId: string,
+    page: number = 1,
+    pageSize: number = 25
+  ): Promise<Paginated<IItemDTO>> {
+    try {
+      const response = await this.api.getUserFavItemsById<IItemDTO>(
+        userId,
+        page,
+        pageSize
+      );
+      return response;
+    } catch (error) {
+      console.error(`Error fetching favorite items for user ${userId}:`, error);
+      throw this.createItemError(
+        `Failed to fetch favorite items for user ${userId}`,
+        error
+      );
     }
   }
 
@@ -112,18 +136,16 @@ export class ItemService implements IItemService {
     }
   }
 
-  async deleteItem(id: number): Promise<void> {
+  async deleteItem(documentId: string): Promise<void> {
     try {
-      const response = await this.api.post(`api/items/${id}`, undefined, {
-        "X-HTTP-Method-Override": "DELETE",
-      });
+      const response = await this.api.deleteItemById(documentId);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
     } catch (error) {
-      console.error(`Error deleting item ${id}:`, error);
-      throw this.createItemError(`Failed to delete item ${id}`, error);
+      console.error(`Error deleting item ${documentId}:`, error);
+      throw this.createItemError(`Failed to delete item ${documentId}`, error);
     }
   }
 
