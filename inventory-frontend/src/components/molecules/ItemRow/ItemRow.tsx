@@ -18,6 +18,7 @@ const ItemRow = ({
   onDelete,
   onToggleFavorite,
 }: IItemRowProps) => {
+  // TODO: Implementar funcionalidad de edición
   const handleEdit = () => {
     onEdit?.(item);
   };
@@ -26,9 +27,14 @@ const ItemRow = ({
     onDelete?.(item);
   };
 
+  // TODO: Implementar funcionalidad de toggle favorito
   const handleToggleFavorite = () => {
     onToggleFavorite?.(item);
   };
+
+  // Supresión de warnings para handlers no utilizados
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _unusedHandlers = { handleEdit, handleToggleFavorite };
 
   const formatDate = (date?: Date | string) => {
     if (!date) return "N/A";
