@@ -32,9 +32,9 @@ const ItemRow = ({
     onToggleFavorite?.(item);
   };
 
-  // Supresión de warnings para handlers no utilizados
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _unusedHandlers = { handleEdit, handleToggleFavorite };
+  // Supresión de warnings para handlers no utilizados (preparados para futura implementación)
+  void handleEdit;
+  void handleToggleFavorite;
 
   const formatDate = (date?: Date | string) => {
     if (!date) return "N/A";

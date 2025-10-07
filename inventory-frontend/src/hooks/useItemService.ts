@@ -53,7 +53,7 @@ export const useItemService = () => {
   );
 
   const deleteItem = useCallback(
-    async (id: number): Promise<void> => {
+    async (id: string): Promise<void> => {
       try {
         setLoading(true);
         setError(null);
