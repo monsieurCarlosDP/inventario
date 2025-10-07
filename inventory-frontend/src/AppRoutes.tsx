@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import AddItem from "./components/pages/AddItem";
 import FavItems from "./components/pages/FavItems";
 import ListItems from "./components/pages/ListItems";
-import Login from "./components/pages/Login";
+import Login from "./components/pages/Login.tsx";
 import ProtectedLayout from "./components/templates/ProtectedLayout";
 
 interface IAppRouteProps {
