@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "item_types",
+  "info": {
+    "singularName": "item-type",
+    "pluralName": "item-types",
+    "displayName": "ItemType"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string"
+    },
+    "Icon": {
+      "type": "string"
+    },
+    "Color": {
+      "type": "string"
+    }
+  }
+}

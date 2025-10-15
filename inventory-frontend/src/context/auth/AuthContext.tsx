@@ -43,9 +43,7 @@ export const AuthContextProvider = ({
             if (userData && typeof userData === "object" && userData.id) {
               api.setAuthToken(authToken);
               setUser(userData);
-              console.log("Usuario restaurado:", userData);
             } else {
-              console.warn("Datos de usuario inválidos:", userData);
               // Limpiar datos corruptos
               localStorage.removeItem("user");
               localStorage.removeItem("authToken");

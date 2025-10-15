@@ -56,6 +56,31 @@ const ItemRow = ({
         />
       </TableCell>
       <TableCell>{item.Name || "No name"}</TableCell>
+      <TableCell align="center">
+        {item.item_type ? (
+          <Avatar
+            sx={{
+              bgcolor: item.item_type.Color || "#ccc",
+              width: 40,
+              height: 40,
+              fontSize: "1.2rem",
+            }}
+          >
+            {item.item_type.Icon || "?"}
+          </Avatar>
+        ) : (
+          <Avatar
+            sx={{
+              bgcolor: "#ccc",
+              width: 40,
+              height: 40,
+              fontSize: "1.2rem",
+            }}
+          >
+            ?
+          </Avatar>
+        )}
+      </TableCell>
       <TableCell>{item.Description || "No description"}</TableCell>
       <TableCell align="center">
         <AvatarGroup max={3}>

@@ -107,6 +107,14 @@ export class Api {
       `api/items?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}`
     );
   }
+  async getItemTypeList<T = IItemList>(
+    page: number = 1,
+    pageSize: number = 25
+  ): Promise<Paginated<T>> {
+    return this.get<Paginated<T>>(
+      `api/item-types?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}`
+    );
+  }
 
   async deleteItemById(id: string): Promise<Response> {
     return this.delete(`api/items/${id}`);

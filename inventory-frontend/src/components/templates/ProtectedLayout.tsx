@@ -16,8 +16,6 @@ const ProtectedLayout = ({ children }: IProtectedRoutesProps) => {
   const { isLogging, user } = useAuth();
   const navigate = useNavigate();
 
-  console.log(isLogging);
-
   if (!user && !isLogging) return <Navigate to="/login" />;
 
   const actions = [

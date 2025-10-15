@@ -4,6 +4,7 @@ import type {
   ICreateItemRequest,
   IItemDTO,
   IItemService,
+  IItemTypeDTO,
   IUpdateItemRequest,
 } from "./IItemService";
 
@@ -24,6 +25,22 @@ export class ItemService implements IItemService {
     } catch (error) {
       console.error("Error fetching items:", error);
       throw this.createItemError("Failed to fetch items", error);
+    }
+  }
+
+  async getItemTypes(
+    page?: number,
+    pageSize?: number
+  ): Promise<Paginated<IItemTypeDTO>> {
+    try {
+      const response = await this.api.getItemTypeList<IItemTypeDTO>(
+        page,
+        pageSize
+      );
+      return response;
+    } catch (error) {
+      console.error("Error fetching item types:", error);
+      throw this.createItemError("Failed to fetch item types", error);
     }
   }
 

@@ -41,6 +41,11 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "item"
+    },
+    "item_type": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::item-type.item-type"
     }
   }
 }

@@ -12,6 +12,18 @@ export interface IItem {
   Photos: Photo[];
   Favorited: FavoritedUser[];
   UserAddedBy: FavoritedUser | null;
+  item_type: ItemType | null;
+}
+
+export interface ItemType {
+  id: number;
+  documentId: string;
+  Name: string;
+  Icon: string;
+  Color: string;
+  createdAt: string; // ISO-8601
+  updatedAt: string; // ISO-8601
+  publishedAt: string; // ISO-8601
 }
 
 export interface Photo {
