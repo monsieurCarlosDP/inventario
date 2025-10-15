@@ -1,8 +1,10 @@
 import { Alert, CircularProgress, Stack, Typography } from "@mui/material";
 import { useEffect, useReducer } from "react";
 import { useAuth } from "../../context/auth/useAuth";
+import type { ItemType } from "../../data/Models";
 import { useItemService } from "../../hooks/useItemService";
 import Button from "../atoms/Button/Button";
+import ItemTypeSelect from "../atoms/Input/ItemTypeSelect";
 import StarCheckbox from "../atoms/Input/StarCheckbox";
 import TextField from "../atoms/Input/TextField";
 import UploadPhoto from "../organisms/UploadPhoto/UploadPhoto";
@@ -12,6 +14,7 @@ interface FormState {
   name: string;
   description: string;
   isFavorite: boolean;
+  itemType: ItemType | null;
   photo: File | null;
   uploadedPhotoId: number | null; // ID de la foto subida
   isSubmitting: boolean;
@@ -26,6 +29,7 @@ type FormAction =
   | { type: "SET_NAME"; payload: string }
   | { type: "SET_DESCRIPTION"; payload: string }
   | { type: "SET_FAVORITE"; payload: boolean }
+  | { type: "SET_ITEM_TYPE"; payload: ItemType | null }
   | { type: "SET_PHOTO"; payload: File | null }
   | { type: "SET_UPLOADED_PHOTO_ID"; payload: number | null }
   | { type: "SET_SUBMITTING"; payload: boolean }
@@ -41,6 +45,7 @@ const initialState: FormState = {
   name: "",
   description: "",
   isFavorite: false,
+  itemType: null,
   photo: null,
   uploadedPhotoId: null,
   isSubmitting: false,
@@ -59,6 +64,8 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
       return { ...state, description: action.payload };
     case "SET_FAVORITE":
       return { ...state, isFavorite: action.payload };
+    case "SET_ITEM_TYPE":
+      return { ...state, itemType: action.payload };
     case "SET_PHOTO":
       return { ...state, photo: action.payload, uploadedPhotoId: null }; // Reset uploaded ID when new photo is selected
     case "SET_UPLOADED_PHOTO_ID":
@@ -147,6 +154,7 @@ const AddItem = () => {
           Name: formState.name.trim(),
           Description: formState.description.trim() || undefined,
           Photos: formState.uploadedPhotoId, // Usar "Photos" como espera el backend
+          item_type: formState.itemType, // Enviar el objeto completo o null
         };
 
         // Solo agregar Favorited si isFavorite es true
@@ -182,6 +190,7 @@ const AddItem = () => {
     formState.name,
     formState.description,
     formState.isFavorite,
+    formState.itemType,
     formState.uploadedPhotoId,
     formState.photo,
     formState.isUploadingPhoto,
@@ -202,6 +211,10 @@ const AddItem = () => {
 
   const handleFavoriteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: "SET_FAVORITE", payload: event.target.checked });
+  };
+
+  const handleItemTypeChange = (value: ItemType | null) => {
+    dispatch({ type: "SET_ITEM_TYPE", payload: value });
   };
 
   const handlePhotoChange = (photo: File | null) => {
@@ -273,6 +286,14 @@ const AddItem = () => {
           label="Descripcion"
           value={formState.description}
           onChange={handleDescriptionChange}
+        />
+      </Stack>
+      <Stack>
+        <ItemTypeSelect
+          value={formState.itemType}
+          onChange={handleItemTypeChange}
+          label="Tipo de Item"
+          sx={{ width: "100%" }}
         />
       </Stack>
       <Stack flexDirection="row" flexGrow={1} alignItems="center" gap={2}>

@@ -90,12 +90,21 @@ export class ItemService implements IItemService {
       if (itemData.Photos !== undefined) {
         dataObject.Photos = itemData.Photos;
       }
+      if (itemData.item_type !== undefined) {
+        // Remover documentId del item_type antes de enviarlo
+        if (itemData.item_type !== null) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { documentId, ...itemTypeWithoutDocumentId } =
+            itemData.item_type;
+          dataObject.item_type = itemTypeWithoutDocumentId;
+        } else {
+          dataObject.item_type = null;
+        }
+      }
 
       const jsonData = {
         data: dataObject,
       };
-
-      console.log("📤 Sending JSON data:", jsonData);
 
       const response = await this.api.post("api/items", jsonData);
 
